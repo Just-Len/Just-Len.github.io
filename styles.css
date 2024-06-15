@@ -1,0 +1,11 @@
+body {
+    background-image: url("https://media.tenor.com/wv7Rwz7ePHQAAAAi/lain-iwakura.gif");
+    background-color: var(--color-primary);
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: grid;
+    grid-template-rows: min-content min-content auto;
+    height: 100vh;
+    text-align: center;
+    margin: 0;
+}
