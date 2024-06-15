@@ -4,21 +4,43 @@ document.getElementById('add-sjf-process-btn').addEventListener('click', addProc
 document.getElementById('sjf-btn').addEventListener('click', calculateSJF);
 
 function addProcess() {
-    const pid = document.getElementById('sjf-pid').value;
-    const arrival = parseInt(document.getElementById('sjf-arrival-time').value);
-    const burst = parseInt(document.getElementById('sjf-burst-time').value);
+    const pidString = document.getElementById('sjf-pid').value;
+    const arrivalTimeString = document.getElementById('sjf-arrival-time').value;
+    const burstTimeString = document.getElementById('sjf-burst-time').value;
 
-    if (sjfProcesses.has(pid)) {
-        alert('Los ID de proceso (PID) deben ser únicos.')
+    const pids = pidString.split(" ");
+    const arrivalTimes = arrivalTimeString.split(" ");
+    const burstTimes = burstTimeString.split(" ");
+
+    if (pids.length !== arrivalTimes.length || pids.length !== burstTimes.length) {
+        alert('Debe ingresar la misma cantidad de elementos separados por espacios en los campos.');
+        return;
     }
-    else if (!pid || isNaN(arrival) || isNaN(burst)) {
-        alert('Ingrese informacion valida en los campos.');
-    } else {
-        const process = { pid, arrival, burst };
-        sjfProcesses.set(pid, process);
-        displayProcesses(sjfProcesses, 'sjf-table-body');
-        saveToLocalStorage('sjf-processes', sjfProcesses);
+
+    const newProcesses = [];
+    for (let i = 0; i < pids.length; ++i) {
+        const pid = pids[i];
+        const arrival = parseInt(arrivalTimes[i]);
+        const burst = parseInt(burstTimes[i]);
+
+        if (sjfProcesses.has(pid)) {
+            alert('Los ID de proceso (PID) deben ser únicos.');
+            return;
+        }
+        else if (!pid || isNaN(arrival) || isNaN(burst)) {
+            alert('Ingrese informacion valida en los campos.');
+            return;
+        } else {
+            const process = new Process(pid, arrival, burst);
+            newProcesses.push(process);
+        }
     }
+
+    for (const process of newProcesses) {
+        sjfProcesses.set(process.pid, process);
+    }
+    displayProcesses(sjfProcesses, 'sjf-table-body');
+    saveToLocalStorage('sjf-processes', sjfProcesses);
 }
 
 function calculateSJF() {
@@ -36,13 +58,14 @@ function sjfAlgorithm(processes) {
     processes.forEach(process => {
         const startTime = Math.max(time, process.arrival);
         const finishTime = startTime + process.burst;
-        result.push({
-            pid: process.pid,
-            arrival: process.arrival,
-            burst: process.burst,
+        result.push(new Process(
+            process.pid,
+            process.arrival,
+            process.burst,
             startTime,
             finishTime
-        });
+        ));
+
         time = finishTime;
     });
 
