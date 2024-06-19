@@ -97,7 +97,7 @@ processes.sort((a, b) => a.burst - b.burst);
         if(timePerProcess[shortest] == 0) {
             complete++;
             check = false;
-            finishTime = startTime + processes[shortest].burst;
+            finishTime = startingTime[shortest] + processes[shortest].burst;
 
             result.push(new Process(
                 processes[shortest].pid,
