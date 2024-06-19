@@ -1,6 +1,4 @@
 body {
-    background-image: url("assets/lain-iwakura.gif");
-    background-color: var(--color-primary);
     background-repeat: no-repeat;
     background-size: cover;
     display: grid;
