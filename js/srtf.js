@@ -40,7 +40,7 @@ function addProcess() {
         srtfProcesses.set(process.pid, process);
     }
     displayProcesses(srtfProcesses, 'srtf-table-body');
-    saveToLocalStorage('srtf-processes', srtfProcesses);
+    saveToLocalStorage('srtf-processes', newProcesses);
 }
 
 function calculateSJF() {
@@ -112,50 +112,6 @@ processes.sort((a, b) => a.burst - b.burst);
     }
 
     return result;
-}
-
-function displayProcesses(processes, tableBodyId) {
-    const tableBody = document.getElementById(tableBodyId);
-    tableBody.innerHTML = '';
-    processes.forEach(process => {
-        const row = `<tr>
-            <td>${process.pid}</td>
-            <td>${process.arrival}</td>
-            <td>${process.burst}</td>
-            <td></td>
-            <td></td>
-        </tr>`;
-        tableBody.insertAdjacentHTML('beforeend', row);
-    });
-}
-
-function displayResult(result, tableBodyId) {
-    const tableBody = document.getElementById(tableBodyId);
-    tableBody.innerHTML = '';
-    result.forEach(r => {
-        const row = `<tr>
-            <td>${r.pid}</td>
-            <td>${r.arrival}</td>
-            <td>${r.burst}</td>
-            <td>${r.startTime}</td>
-            <td>${r.finishTime}</td>
-        </tr>`;
-        tableBody.insertAdjacentHTML('beforeend', row);
-    });
-}
-
-function saveToLocalStorage(key, data) {
-    localStorage.setItem(key, JSON.stringify(data));
-}
-
-function loadFromLocalStorage(key, tableBodyId) {
-    const data = JSON.parse(localStorage.getItem(key)) || [];
-    if (key === 'srtf-processes') {
-        srtfProcesses = new Map(data);
-        displayProcesses(data, tableBodyId);
-    } else {
-        displayResult(data, tableBodyId);
-    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

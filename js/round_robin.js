@@ -49,7 +49,7 @@ function addProcess() {
         roundRobinProcesses.set(process.pid, process);
     }
     displayProcesses(roundRobinProcesses, 'round-robin-table-body');
-    saveToLocalStorage('round-robin-processes', roundRobinProcesses);
+    saveToLocalStorage('round-robin-processes', newProcesses);
 }
 
 function calculateRoundRobin() {
@@ -60,7 +60,7 @@ function calculateRoundRobin() {
 }
 
 function roundRobinAlgorithm(processes) {
-processes.sort((a, b) => a.arrival - b.arrival);
+    processes.sort((a, b) => a.arrival - b.arrival);
     let time = 0;
     let result = [];
     let n = processes.length;
@@ -143,50 +143,6 @@ processes.sort((a, b) => a.arrival - b.arrival);
     }
 
     return result;
-}
-
-function displayProcesses(processes, tableBodyId) {
-    const tableBody = document.getElementById(tableBodyId);
-    tableBody.innerHTML = '';
-    processes.forEach(process => {
-        const row = `<tr>
-            <td>${process.pid}</td>
-            <td>${process.arrival}</td>
-            <td>${process.burst}</td>
-            <td></td>
-            <td></td>
-        </tr>`;
-        tableBody.insertAdjacentHTML('beforeend', row);
-    });
-}
-
-function displayResult(result, tableBodyId) {
-    const tableBody = document.getElementById(tableBodyId);
-    tableBody.innerHTML = '';
-    result.forEach(r => {
-        const row = `<tr>
-            <td>${r.pid}</td>
-            <td>${r.arrival}</td>
-            <td>${r.burst}</td>
-            <td>${r.startTime}</td>
-            <td>${r.finishTime}</td>
-        </tr>`;
-        tableBody.insertAdjacentHTML('beforeend', row);
-    });
-}
-
-function saveToLocalStorage(key, data) {
-    localStorage.setItem(key, JSON.stringify(data));
-}
-
-function loadFromLocalStorage(key, tableBodyId) {
-    const data = JSON.parse(localStorage.getItem(key)) || [];
-    if (key === 'round-robin-processes') {
-        srtfProcesses = new Map(data);
-        displayProcesses(data, tableBodyId);
-    } else {
-        displayResult(data, tableBodyId);
-    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
